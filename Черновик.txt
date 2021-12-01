@@ -1,0 +1,225 @@
+package com.mygdx.game;
+
+import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.ScreenUtils;
+
+import java.util.ArrayList;
+
+
+public class Person implements Screen {
+    private SpriteBatch batch;
+    private ImageButton person;
+    private Game game;
+    private Rectangle rect;
+    private float fromX;
+    private final float speed = 40f;
+    private float toX;
+    private boolean isPressed;
+    private Stage stage;
+    private ArrayList<ImageButton> points;
+    private ImageButton im;
+
+    Person(Game game) {
+        this.game = game;
+        stage = new Stage();
+        points = new ArrayList<>();
+        batch = new SpriteBatch();
+        OrthographicCamera camera = new OrthographicCamera();
+        camera.setToOrtho(false, 800, 480);
+        Vector3 vector3 = new Vector3();
+
+        Skin skin = new Skin();
+        skin.add("o", new Texture("o.png"));
+        skin.add("person", new Texture("p.jpg"));
+        int x = 20;
+        for (int i = 0; i < 5; i++) {
+            points.add(new ImageButton(skin.getDrawable("o")));
+            points.get(i).setX(x);
+            points.get(i).setY(80);
+            x += 300;
+        }
+        rect = new Rectangle();
+        rect.x = 40;
+        rect.y = 80;
+        rect.height = 128;
+        rect.width = 32;
+
+        person = new ImageButton(skin.getDrawable("person"));
+        person.setX(rect.x);
+        person.setY(rect.y);
+        System.out.println("0");
+        stage.addActor(person);
+        for (ImageButton ib : points) {
+            stage.addActor(ib);
+        }
+        //stage.addActor(im);
+        Gdx.input.setInputProcessor(stage);
+    }
+
+    @Override
+    public void show() {
+        person.addListener(new ClickListener() {
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                System.out.println("1");
+                points.get(0).addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        moving();
+                        fromX = person.getX();
+                        toX = points.get(0).getX();
+                        return true;
+                    }
+                });
+
+                points.get(1).addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        moving();
+                        fromX = person.getX();
+                        toX = points.get(1).getX();
+                        return true;
+                    }
+                });
+
+                points.get(2).addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        moving();
+                        fromX = person.getX();
+                        toX = points.get(2).getX();
+                        return true;
+                    }
+                });
+
+                points.get(3).addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        moving();
+                        fromX = person.getX();
+                        toX = points.get(3).getX();
+                        return true;
+                    }
+                });
+
+                points.get(4).addListener(new ClickListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        moving();
+                        fromX = person.getX();
+                        toX = points.get(4).getX();
+                        return true;
+                    }
+                });
+                return true;
+            }
+        });
+    }
+
+    public void moving() {
+        isPressed = true;
+    }
+
+    @Override
+    public void render(float delta) {
+        ScreenUtils.clear(1, 1, 1, 1);
+        if (isPressed && fromX < toX) {
+            fromX += speed * delta;
+            person.setX(fromX);
+        } else if (isPressed && fromX > toX) {
+            fromX -= speed * delta;
+            person.setX(fromX);
+        }
+        stage.act();
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+        batch.dispose();
+    }
+
+    @Override
+    public void dispose() {
+
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+package com.mygdx.game;
+
+import com.badlogic.gdx.Game;
+
+public class Life extends Game {
+
+    @Override
+    public void create() {
+        setScreen(new Person(this));
+    }
+}
